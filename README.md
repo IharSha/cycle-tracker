@@ -1,2 +1,2 @@
-# Period-tracker
+# Cycle-tracker
 Offline period tracker
