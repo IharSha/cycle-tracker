@@ -18,6 +18,13 @@
               800: '#27272a',
               900: '#18181b',
               950: '#0f0f11',
+            },
+            roseAccent: {
+              light: '#f87171',
+              dark: '#ef4444',
+              soft: '#fca5a5',
+              bgLight: '#fef2f2',
+              bgDark: '#2c1919'
             }
           }
         }
@@ -31,20 +38,20 @@
     <!-- Header -->
     <header class="flex justify-between items-center py-4 border-b border-zinc-200 dark:border-zinc-800">
       <div>
-        <h1 class="text-xl font-light tracking-widest uppercase">Cycle</h1>
+        <h1 class="text-xl font-light tracking-widest uppercase text-rose-500 dark:text-rose-400">Cycle</h1>
         <p id="stats-summary" class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Calculating...</p>
       </div>
       <div class="flex items-center gap-3">
         <!-- View Toggle -->
-        <button id="view-toggle" class="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded border border-zinc-300 dark:border-zinc-700">Year</button>
+        <button id="view-toggle" class="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800">Year</button>
         <!-- Dark Mode Toggle -->
         <button id="theme-toggle" class="p-1.5 rounded-full border border-zinc-300 dark:border-zinc-700">
-          <svg id="moon-icon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-          <svg id="sun-icon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          <svg id="moon-icon" class="w-4 h-4 hidden dark:block text-rose-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg id="sun-icon" class="w-4 h-4 block dark:hidden text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
         <!-- Settings -->
         <button id="open-settings" class="p-1.5 rounded-full border border-zinc-300 dark:border-zinc-700">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <svg class="w-4 h-4 text-zinc-600 dark:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
         </button>
       </div>
     </header>
@@ -63,7 +70,7 @@
           <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
         </div>
 
-        <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1.5"></div>
         
         <p class="text-center text-xs text-zinc-400 mt-6 font-mono">
           Tap date to toggle period &bull; Hold for notes
@@ -77,50 +84,50 @@
           <h2 id="current-year-label" class="font-medium text-lg tracking-wide">2026</h2>
           <button id="next-year" class="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&rarr;</button>
         </div>
-        <div id="year-grid" class="grid grid-cols-3 gap-4"></div>
+        <div id="year-grid" class="grid grid-cols-3 gap-3"></div>
       </div>
     </main>
 
     <!-- Bottom Drawer Note Editor (Hidden by default) -->
-    <div id="note-drawer" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end">
+    <div id="note-drawer" class="fixed inset-0 bg-black/60 hidden z-50 flex items-end">
       <div class="w-full max-w-md mx-auto bg-white dark:bg-zinc-900 rounded-t-2xl p-5 space-y-4 shadow-xl border-t border-zinc-200 dark:border-zinc-800">
         <div class="flex justify-between items-center">
           <h3 id="drawer-date-label" class="font-medium text-sm tracking-wide"></h3>
-          <button id="close-drawer" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&times;</button>
+          <button id="close-drawer" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 text-xl">&times;</button>
         </div>
 
         <div class="flex gap-2">
-          <button id="toggle-period-btn" class="flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-zinc-300 dark:border-zinc-700">
+          <button id="toggle-period-btn" class="flex-1 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-colors">
             Mark Period Start
           </button>
         </div>
 
-        <textarea id="drawer-note-input" rows="3" placeholder="Add optional notes, symptoms, mood..." class="w-full p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-sm focus:outline-none resize-none border border-transparent focus:border-zinc-400 dark:focus:border-zinc-600"></textarea>
+        <textarea id="drawer-note-input" rows="3" placeholder="Add optional notes, symptoms, mood..." class="w-full p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-sm focus:outline-none resize-none border border-transparent focus:border-rose-400 dark:focus:border-rose-500"></textarea>
 
-        <button id="save-drawer" class="w-full py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-mono uppercase tracking-wider rounded">
+        <button id="save-drawer" class="w-full py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-mono uppercase tracking-wider rounded-lg shadow-sm">
           Save Entry
         </button>
       </div>
     </div>
 
     <!-- Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+    <div id="settings-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
       <div class="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl p-6 space-y-5 border border-zinc-200 dark:border-zinc-800">
         <div class="flex justify-between items-center">
           <h3 class="font-medium">Data & Storage</h3>
-          <button id="close-settings" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&times;</button>
+          <button id="close-settings" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 text-xl">&times;</button>
         </div>
 
         <div class="space-y-3">
           <label class="block text-xs uppercase tracking-wider font-mono text-zinc-500">Import Flo or Backup JSON</label>
-          <input type="file" id="import-file" accept=".json" class="block w-full text-xs text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-mono file:bg-zinc-100 dark:file:bg-zinc-800 file:text-zinc-700 dark:file:text-zinc-300 hover:file:bg-zinc-200" />
+          <input type="file" id="import-file" accept=".json" class="block w-full text-xs text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-zinc-100 dark:file:bg-zinc-800 file:text-zinc-700 dark:file:text-zinc-300 hover:file:bg-zinc-200" />
         </div>
 
         <div class="space-y-2 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-          <button id="export-btn" class="w-full py-2 bg-zinc-100 dark:bg-zinc-800 rounded text-xs font-mono uppercase tracking-wider">
+          <button id="export-btn" class="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg text-xs font-mono uppercase tracking-wider">
             Export JSON Backup
           </button>
-          <button id="clear-btn" class="w-full py-2 border border-red-500/30 text-red-500 rounded text-xs font-mono uppercase tracking-wider">
+          <button id="clear-btn" class="w-full py-2.5 border border-rose-500/30 text-rose-500 hover:bg-rose-500/10 rounded-lg text-xs font-mono uppercase tracking-wider">
             Clear All Local Data
           </button>
         </div>
@@ -129,7 +136,7 @@
   </div>
 
   <script>
-    // Storage Engine (IndexedDB + fallback to LocalStorage)
+    // Local Storage Wrapper
     const Storage = {
       KEY: 'minimalist_period_tracker_db',
       data: { periods: {}, notes: {} },
@@ -168,7 +175,6 @@
         a.click();
       },
       importFlo(jsonObj) {
-        // Multi-schema Flo & generic auto-parser
         let count = 0;
         const findDates = (obj) => {
           if (!obj) return;
@@ -212,7 +218,10 @@
     const settingsModal = document.getElementById('settings-modal');
 
     function formatDateStr(date) {
-      return date.toISOString().split('T')[0];
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     function updateStats() {
@@ -221,11 +230,19 @@
         statsSummary.innerText = "No periods logged yet";
         return;
       }
-      const last = new Date(dates[0]);
+      const last = new Date(dates[0] + 'T00:00:00');
       const today = new Date();
-      const diffTime = Math.abs(today - last);
+      today.setHours(0,0,0,0);
+      const diffTime = today - last;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      statsSummary.innerText = `${diffDays} days since last period`;
+      
+      if (diffDays === 0) {
+        statsSummary.innerText = "Period started today";
+      } else if (diffDays > 0) {
+        statsSummary.innerText = `${diffDays} day${diffDays > 1 ? 's' : ''} since last period`;
+      } else {
+        statsSummary.innerText = "Logged date is in the future";
+      }
     }
 
     function renderMonth() {
@@ -238,7 +255,6 @@
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // Empty lead slots
       for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement('div');
         calendarGrid.appendChild(empty);
@@ -251,34 +267,28 @@
         const hasNote = Storage.data.notes[dateStr];
 
         const cell = document.createElement('button');
-        cell.className = `aspect-square rounded-lg flex flex-col items-center justify-center relative text-sm font-medium transition-all ${
+        cell.className = `aspect-square rounded-xl flex flex-col items-center justify-center relative text-sm font-medium transition-all ${
           isPeriod 
-            ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm' 
-            : 'bg-zinc-100/60 dark:bg-zinc-900/40 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
+            ? 'bg-rose-500 text-white dark:bg-rose-500/90 shadow-sm font-semibold' 
+            : 'bg-zinc-100/80 dark:bg-zinc-900/60 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
         }`;
 
         cell.innerHTML = `
           <span>${day}</span>
-          ${hasNote ? `<span class="w-1 h-1 rounded-full ${isPeriod ? 'bg-amber-400 dark:bg-amber-500' : 'bg-zinc-400'} absolute bottom-1.5"></span>` : ''}
+          ${hasNote ? `<span class="w-1.5 h-1.5 rounded-full ${isPeriod ? 'bg-amber-300' : 'bg-rose-400'} absolute bottom-1.5"></span>` : ''}
         `;
 
-        // Touch & Longpress Handling
-        cell.addEventListener('touchstart', (e) => {
-          longPressTimer = setTimeout(() => {
-            openDrawer(dateStr);
-          }, 500);
+        cell.addEventListener('touchstart', () => {
+          longPressTimer = setTimeout(() => openDrawer(dateStr), 500);
         });
         cell.addEventListener('touchend', () => clearTimeout(longPressTimer));
 
-        // Click Handling (Single tap toggles period directly)
         cell.addEventListener('click', () => {
           if (longPressTimer) clearTimeout(longPressTimer);
           Storage.togglePeriod(dateStr);
           renderMonth();
-          updateStats();
         });
 
-        // Context menu (Right click / manual trigger for desktop)
         cell.addEventListener('contextmenu', (e) => {
           e.preventDefault();
           openDrawer(dateStr);
@@ -297,16 +307,16 @@
       const toggleBtn = document.getElementById('toggle-period-btn');
       if (Storage.data.periods[dateStr]) {
         toggleBtn.innerText = "Remove Period Mark";
-        toggleBtn.className = "flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-red-500 text-red-500";
+        toggleBtn.className = "flex-1 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider border border-rose-500/40 text-rose-500 hover:bg-rose-500/10";
       } else {
         toggleBtn.innerText = "Mark Period Start";
-        toggleBtn.className = "flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-zinc-300 dark:border-zinc-700";
+        toggleBtn.className = "flex-1 py-2.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-rose-500/10 text-rose-500 hover:bg-rose-500/20";
       }
 
       drawer.classList.remove('hidden');
     }
 
-    // Controls & Listeners
+    // Month Navigation
     document.getElementById('prev-month').addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderMonth();
@@ -316,6 +326,17 @@
       renderMonth();
     });
 
+    // Year Navigation
+    document.getElementById('prev-year').addEventListener('click', () => {
+      currentDate.setFullYear(currentDate.getFullYear() - 1);
+      renderYear();
+    });
+    document.getElementById('next-year').addEventListener('click', () => {
+      currentDate.setFullYear(currentDate.getFullYear() + 1);
+      renderYear();
+    });
+
+    // Drawer Listeners
     document.getElementById('close-drawer').addEventListener('click', () => drawer.classList.add('hidden'));
     document.getElementById('save-drawer').addEventListener('click', () => {
       const note = document.getElementById('drawer-note-input').value;
@@ -327,27 +348,33 @@
       Storage.togglePeriod(selectedDateStr);
       drawer.classList.add('hidden');
       renderMonth();
-      updateStats();
     });
 
-    // Theme toggle
+    // Theme Toggle
     document.getElementById('theme-toggle').addEventListener('click', () => {
       document.documentElement.classList.toggle('dark');
     });
 
-    // Settings & Flo Import
+    // Settings Modal
     document.getElementById('open-settings').addEventListener('click', () => settingsModal.classList.remove('hidden'));
     document.getElementById('close-settings').addEventListener('click', () => settingsModal.classList.add('hidden'));
     document.getElementById('export-btn').addEventListener('click', () => Storage.exportJSON());
+
+    // ALL CAPS Confirmation for Clear Data
     document.getElementById('clear-btn').addEventListener('click', () => {
-      if (confirm('Clear all stored data?')) {
+      const confirmation = prompt("To permanently erase all period logs and notes, type DELETE in all caps:");
+      if (confirmation === 'DELETE') {
         Storage.data = { periods: {}, notes: {} };
         Storage.save();
         renderMonth();
         settingsModal.classList.add('hidden');
+        alert("All local data has been cleared.");
+      } else if (confirmation !== null) {
+        alert("Confirmation text did not match 'DELETE'. Action canceled.");
       }
     });
 
+    // Flo & Backup Importer
     document.getElementById('import-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -366,7 +393,7 @@
       reader.readAsText(file);
     });
 
-    // View Switching
+    // View Switcher
     document.getElementById('view-toggle').addEventListener('click', () => {
       const yearView = document.getElementById('year-view');
       const monthView = document.getElementById('month-view');
@@ -391,32 +418,34 @@
       const year = currentDate.getFullYear();
       document.getElementById('current-year-label').innerText = year;
 
+      // Get all period start dates sorted chronologically
+      const allDates = Object.keys(Storage.data.periods).sort();
+
       for (let m = 0; m < 12; m++) {
         const monthBox = document.createElement('div');
-        monthBox.className = 'p-2 rounded-lg bg-zinc-100/50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 text-center';
+        monthBox.className = 'p-3 rounded-xl bg-zinc-100/60 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800 text-center flex flex-col justify-between min-h-[90px] cursor-pointer hover:border-rose-400 dark:hover:border-rose-500/50 transition-colors';
+        
         const mName = new Date(year, m, 1).toLocaleString('en-US', { month: 'short' });
         
-        let activeCount = 0;
-        const daysInMonth = new Date(year, m + 1, 0).getDate();
-        for (let d = 1; d <= daysInMonth; d++) {
-          const ds = `${year}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-          if (Storage.data.periods[ds]) activeCount++;
-        }
-
-        monthBox.innerHTML = `
-          <div class="text-xs font-mono uppercase text-zinc-500 mb-1">${mName}</div>
-          <div class="text-lg font-light ${activeCount > 0 ? 'text-zinc-900 dark:text-zinc-100 font-normal' : 'text-zinc-300 dark:text-zinc-700'}">${activeCount}</div>
-          <div class="text-[10px] text-zinc-400">days logged</div>
-        `;
-        monthBox.addEventListener('click', () => {
-          currentDate.setMonth(m);
-          document.getElementById('view-toggle').click();
+        // Find start dates in this month
+        const monthStarts = allDates.filter(d => {
+          const dt = new Date(d + 'T00:00:00');
+          return dt.getFullYear() === year && dt.getMonth() === m;
         });
-        yearGrid.appendChild(monthBox);
-      }
-    }
 
-    renderMonth();
-  </script>
-</body>
-</html>
+        let mainText = "—";
+        let subText = "No log";
+
+        if (monthStarts.length > 0) {
+          const firstStartStr = monthStarts[0];
+          const firstStartDt = new Date(firstStartStr + 'T00:00:00');
+          const dayNum = firstStartDt.getDate();
+
+          subText = `Started ${dayNum}${getDaySuffix(dayNum)}`;
+
+          // Calculate cycle length compared to previous period entry in database
+          const prevIndex = allDates.indexOf(firstStartStr) - 1;
+          if (prevIndex >= 0) {
+            const prevDt = new Date(allDates[prevIndex] + 'T00:00:00');
+            const diffTime = Math.abs(firstStartDt - prevDt);
+            const cycleDays = Math.round(diffTime / (1000 * 6
