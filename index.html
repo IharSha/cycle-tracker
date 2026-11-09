@@ -205,6 +205,8 @@
     let longPressTimer = null;
     let currentView = 'month';
 
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
     // UI Elements
     const calendarGrid = document.getElementById('calendar-grid');
     const monthLabel = document.getElementById('current-month-label');
@@ -251,13 +253,12 @@
       const month = currentDate.getMonth();
 
       if (monthLabel) {
-        monthLabel.innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDate);
+        monthLabel.innerText = `${monthNames[month]} ${year}`;
       }
 
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // Today normalized to midnight for future comparison
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -276,7 +277,6 @@
         const cell = document.createElement('button');
         
         if (isFuture) {
-          // Dimmed styling for future dates
           cell.className = `aspect-square rounded-xl flex flex-col items-center justify-center relative text-sm font-medium bg-zinc-100/30 dark:bg-zinc-900/20 text-zinc-300 dark:text-zinc-700 cursor-not-allowed`;
         } else {
           cell.className = `aspect-square rounded-xl flex flex-col items-center justify-center relative text-sm font-medium transition-all ${
@@ -292,7 +292,6 @@
         `;
 
         if (isFuture) {
-          // Trigger popup notice on future date click
           cell.addEventListener('click', () => {
             alert("You cannot log periods or notes for future dates.");
           });
@@ -444,4 +443,63 @@
 
       for (let m = 0; m < 12; m++) {
         const monthBox = document.createElement('div');
-        monthBox.className = 'p-3 rounded-xl bg-zinc-100/60 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800 text-center flex flex-col justify-between min-h-[90px] cursor-pointer hover:border-rose-400 dark:hover:border-rose
+        monthBox.className = 'p-3 rounded-xl bg-zinc-100/60 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800 text-center flex flex-col justify-between min-h-[90px] cursor-pointer hover:border-rose-400 dark:hover:border-rose-500/50 transition-colors';
+        
+        const mName = monthNames[m].substring(0, 3);
+        
+        const monthStarts = allDates.filter(d => {
+          const dt = new Date(d + 'T00:00:00');
+          return dt.getFullYear() === year && dt.getMonth() === m;
+        });
+
+        let mainText = "—";
+        let subText = "No log";
+
+        if (monthStarts.length > 0) {
+          const firstStartStr = monthStarts[0];
+          const firstStartDt = new Date(firstStartStr + 'T00:00:00');
+          const dayNum = firstStartDt.getDate();
+
+          subText = `Started ${dayNum}${getDaySuffix(dayNum)}`;
+
+          const prevIndex = allDates.indexOf(firstStartStr) - 1;
+          if (prevIndex >= 0) {
+            const prevDt = new Date(allDates[prevIndex] + 'T00:00:00');
+            const diffTime = Math.abs(firstStartDt - prevDt);
+            const cycleDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            mainText = `${cycleDays}d`;
+          } else {
+            mainText = "Log";
+          }
+        }
+
+        monthBox.innerHTML = `
+          <div class="text-[11px] font-mono uppercase text-zinc-400 tracking-wider">${mName}</div>
+          <div class="text-xl font-light ${monthStarts.length > 0 ? 'text-rose-500 font-semibold' : 'text-zinc-300 dark:text-zinc-700'} my-1">${mainText}</div>
+          <div class="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">${subText}</div>
+        `;
+        
+        monthBox.addEventListener('click', () => {
+          currentDate.setMonth(m);
+          document.getElementById('view-toggle').click();
+        });
+
+        yearGrid.appendChild(monthBox);
+      }
+    }
+
+    function getDaySuffix(d) {
+      if (d > 3 && d < 21) return 'th';
+      switch (d % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+      }
+    }
+
+    // Initial render call
+    renderMonth();
+  </script>
+</body>
+</html>
