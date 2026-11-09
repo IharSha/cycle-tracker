@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimalist Period Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fafafa',
+              100: '#f4f4f5',
+              200: '#e4e4e7',
+              800: '#27272a',
+              900: '#18181b',
+              950: '#0f0f11',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-zinc-50 text-zinc-900 dark:bg-brand-950 dark:text-zinc-100 min-h-screen transition-colors duration-200">
+  
+  <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col justify-between p-4 pb-20">
+    <!-- Header -->
+    <header class="flex justify-between items-center py-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div>
+        <h1 class="text-xl font-light tracking-widest uppercase">Cycle</h1>
+        <p id="stats-summary" class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Calculating...</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- View Toggle -->
+        <button id="view-toggle" class="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded border border-zinc-300 dark:border-zinc-700">Year</button>
+        <!-- Dark Mode Toggle -->
+        <button id="theme-toggle" class="p-1.5 rounded-full border border-zinc-300 dark:border-zinc-700">
+          <svg id="moon-icon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg id="sun-icon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+        <!-- Settings -->
+        <button id="open-settings" class="p-1.5 rounded-full border border-zinc-300 dark:border-zinc-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Views -->
+    <main class="flex-1 my-6">
+      <!-- Month View -->
+      <div id="month-view" class="space-y-4">
+        <div class="flex justify-between items-center mb-2">
+          <button id="prev-month" class="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&larr;</button>
+          <h2 id="current-month-label" class="font-medium text-lg tracking-wide"></h2>
+          <button id="next-month" class="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&rarr;</button>
+        </div>
+
+        <div class="grid grid-cols-7 text-center text-xs text-zinc-400 font-mono mb-1">
+          <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+        </div>
+
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+        
+        <p class="text-center text-xs text-zinc-400 mt-6 font-mono">
+          Tap date to toggle period &bull; Hold for notes
+        </p>
+      </div>
+
+      <!-- Year View (Hidden by default) -->
+      <div id="year-view" class="hidden space-y-6">
+        <div class="flex justify-between items-center">
+          <button id="prev-year" class="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&larr;</button>
+          <h2 id="current-year-label" class="font-medium text-lg tracking-wide">2026</h2>
+          <button id="next-year" class="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&rarr;</button>
+        </div>
+        <div id="year-grid" class="grid grid-cols-3 gap-4"></div>
+      </div>
+    </main>
+
+    <!-- Bottom Drawer Note Editor (Hidden by default) -->
+    <div id="note-drawer" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end">
+      <div class="w-full max-w-md mx-auto bg-white dark:bg-zinc-900 rounded-t-2xl p-5 space-y-4 shadow-xl border-t border-zinc-200 dark:border-zinc-800">
+        <div class="flex justify-between items-center">
+          <h3 id="drawer-date-label" class="font-medium text-sm tracking-wide"></h3>
+          <button id="close-drawer" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&times;</button>
+        </div>
+
+        <div class="flex gap-2">
+          <button id="toggle-period-btn" class="flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-zinc-300 dark:border-zinc-700">
+            Mark Period Start
+          </button>
+        </div>
+
+        <textarea id="drawer-note-input" rows="3" placeholder="Add optional notes, symptoms, mood..." class="w-full p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-sm focus:outline-none resize-none border border-transparent focus:border-zinc-400 dark:focus:border-zinc-600"></textarea>
+
+        <button id="save-drawer" class="w-full py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-mono uppercase tracking-wider rounded">
+          Save Entry
+        </button>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl p-6 space-y-5 border border-zinc-200 dark:border-zinc-800">
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium">Data & Storage</h3>
+          <button id="close-settings" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">&times;</button>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-xs uppercase tracking-wider font-mono text-zinc-500">Import Flo or Backup JSON</label>
+          <input type="file" id="import-file" accept=".json" class="block w-full text-xs text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-mono file:bg-zinc-100 dark:file:bg-zinc-800 file:text-zinc-700 dark:file:text-zinc-300 hover:file:bg-zinc-200" />
+        </div>
+
+        <div class="space-y-2 pt-2 border-t border-zinc-200 dark:border-zinc-800">
+          <button id="export-btn" class="w-full py-2 bg-zinc-100 dark:bg-zinc-800 rounded text-xs font-mono uppercase tracking-wider">
+            Export JSON Backup
+          </button>
+          <button id="clear-btn" class="w-full py-2 border border-red-500/30 text-red-500 rounded text-xs font-mono uppercase tracking-wider">
+            Clear All Local Data
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Storage Engine (IndexedDB + fallback to LocalStorage)
+    const Storage = {
+      KEY: 'minimalist_period_tracker_db',
+      data: { periods: {}, notes: {} },
+      
+      init() {
+        const raw = localStorage.getItem(this.KEY);
+        if (raw) {
+          try { this.data = JSON.parse(raw); } catch(e){}
+        }
+      },
+      save() {
+        localStorage.setItem(this.KEY, JSON.stringify(this.data));
+      },
+      togglePeriod(dateStr) {
+        if (this.data.periods[dateStr]) {
+          delete this.data.periods[dateStr];
+        } else {
+          this.data.periods[dateStr] = true;
+        }
+        this.save();
+      },
+      setNote(dateStr, note) {
+        if (!note || !note.trim()) {
+          delete this.data.notes[dateStr];
+        } else {
+          this.data.notes[dateStr] = note.trim();
+        }
+        this.save();
+      },
+      exportJSON() {
+        const blob = new Blob([JSON.stringify(this.data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cycle-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+      },
+      importFlo(jsonObj) {
+        // Multi-schema Flo & generic auto-parser
+        let count = 0;
+        const findDates = (obj) => {
+          if (!obj) return;
+          if (typeof obj === 'string' && /^\d{4}-\d{2}-\d{2}/.test(obj)) {
+            const d = obj.split('T')[0];
+            this.data.periods[d] = true;
+            count++;
+          } else if (Array.isArray(obj)) {
+            obj.forEach(findDates);
+          } else if (typeof obj === 'object') {
+            for (let k in obj) {
+              if (['date', 'startDate', 'start_date', 'logged_at', 'cycle_start'].includes(k) && typeof obj[k] === 'string') {
+                const d = obj[k].split('T')[0];
+                this.data.periods[d] = true;
+                count++;
+              } else {
+                findDates(obj[k]);
+              }
+            }
+          }
+        };
+        findDates(jsonObj);
+        this.save();
+        return count;
+      }
+    };
+
+    Storage.init();
+
+    // App State
+    let currentDate = new Date();
+    let selectedDateStr = null;
+    let longPressTimer = null;
+    let currentView = 'month';
+
+    // UI Elements
+    const calendarGrid = document.getElementById('calendar-grid');
+    const monthLabel = document.getElementById('current-month-label');
+    const statsSummary = document.getElementById('stats-summary');
+    const drawer = document.getElementById('note-drawer');
+    const settingsModal = document.getElementById('settings-modal');
+
+    function formatDateStr(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    function updateStats() {
+      const dates = Object.keys(Storage.data.periods).sort().reverse();
+      if (dates.length === 0) {
+        statsSummary.innerText = "No periods logged yet";
+        return;
+      }
+      const last = new Date(dates[0]);
+      const today = new Date();
+      const diffTime = Math.abs(today - last);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      statsSummary.innerText = `${diffDays} days since last period`;
+    }
+
+    function renderMonth() {
+      calendarGrid.innerHTML = '';
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      monthLabel.innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDate);
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Empty lead slots
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        calendarGrid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(year, month, day);
+        const dateStr = formatDateStr(dateObj);
+        const isPeriod = Storage.data.periods[dateStr];
+        const hasNote = Storage.data.notes[dateStr];
+
+        const cell = document.createElement('button');
+        cell.className = `aspect-square rounded-lg flex flex-col items-center justify-center relative text-sm font-medium transition-all ${
+          isPeriod 
+            ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-sm' 
+            : 'bg-zinc-100/60 dark:bg-zinc-900/40 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
+        }`;
+
+        cell.innerHTML = `
+          <span>${day}</span>
+          ${hasNote ? `<span class="w-1 h-1 rounded-full ${isPeriod ? 'bg-amber-400 dark:bg-amber-500' : 'bg-zinc-400'} absolute bottom-1.5"></span>` : ''}
+        `;
+
+        // Touch & Longpress Handling
+        cell.addEventListener('touchstart', (e) => {
+          longPressTimer = setTimeout(() => {
+            openDrawer(dateStr);
+          }, 500);
+        });
+        cell.addEventListener('touchend', () => clearTimeout(longPressTimer));
+
+        // Click Handling (Single tap toggles period directly)
+        cell.addEventListener('click', () => {
+          if (longPressTimer) clearTimeout(longPressTimer);
+          Storage.togglePeriod(dateStr);
+          renderMonth();
+          updateStats();
+        });
+
+        // Context menu (Right click / manual trigger for desktop)
+        cell.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          openDrawer(dateStr);
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+      updateStats();
+    }
+
+    function openDrawer(dateStr) {
+      selectedDateStr = dateStr;
+      document.getElementById('drawer-date-label').innerText = dateStr;
+      document.getElementById('drawer-note-input').value = Storage.data.notes[dateStr] || '';
+      
+      const toggleBtn = document.getElementById('toggle-period-btn');
+      if (Storage.data.periods[dateStr]) {
+        toggleBtn.innerText = "Remove Period Mark";
+        toggleBtn.className = "flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-red-500 text-red-500";
+      } else {
+        toggleBtn.innerText = "Mark Period Start";
+        toggleBtn.className = "flex-1 py-2 rounded text-xs font-mono uppercase tracking-wider border border-zinc-300 dark:border-zinc-700";
+      }
+
+      drawer.classList.remove('hidden');
+    }
+
+    // Controls & Listeners
+    document.getElementById('prev-month').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderMonth();
+    });
+    document.getElementById('next-month').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderMonth();
+    });
+
+    document.getElementById('close-drawer').addEventListener('click', () => drawer.classList.add('hidden'));
+    document.getElementById('save-drawer').addEventListener('click', () => {
+      const note = document.getElementById('drawer-note-input').value;
+      Storage.setNote(selectedDateStr, note);
+      drawer.classList.add('hidden');
+      renderMonth();
+    });
+    document.getElementById('toggle-period-btn').addEventListener('click', () => {
+      Storage.togglePeriod(selectedDateStr);
+      drawer.classList.add('hidden');
+      renderMonth();
+      updateStats();
+    });
+
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Settings & Flo Import
+    document.getElementById('open-settings').addEventListener('click', () => settingsModal.classList.remove('hidden'));
+    document.getElementById('close-settings').addEventListener('click', () => settingsModal.classList.add('hidden'));
+    document.getElementById('export-btn').addEventListener('click', () => Storage.exportJSON());
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      if (confirm('Clear all stored data?')) {
+        Storage.data = { periods: {}, notes: {} };
+        Storage.save();
+        renderMonth();
+        settingsModal.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('import-file').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const json = JSON.parse(evt.target.result);
+          const importedCount = Storage.importFlo(json);
+          alert(`Successfully imported ${importedCount} cycle records!`);
+          settingsModal.classList.add('hidden');
+          renderMonth();
+        } catch(err) {
+          alert('Could not parse JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // View Switching
+    document.getElementById('view-toggle').addEventListener('click', () => {
+      const yearView = document.getElementById('year-view');
+      const monthView = document.getElementById('month-view');
+      if (currentView === 'month') {
+        currentView = 'year';
+        monthView.classList.add('hidden');
+        yearView.classList.remove('hidden');
+        document.getElementById('view-toggle').innerText = 'Month';
+        renderYear();
+      } else {
+        currentView = 'month';
+        yearView.classList.add('hidden');
+        monthView.classList.remove('hidden');
+        document.getElementById('view-toggle').innerText = 'Year';
+        renderMonth();
+      }
+    });
+
+    function renderYear() {
+      const yearGrid = document.getElementById('year-grid');
+      yearGrid.innerHTML = '';
+      const year = currentDate.getFullYear();
+      document.getElementById('current-year-label').innerText = year;
+
+      for (let m = 0; m < 12; m++) {
+        const monthBox = document.createElement('div');
+        monthBox.className = 'p-2 rounded-lg bg-zinc-100/50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 text-center';
+        const mName = new Date(year, m, 1).toLocaleString('en-US', { month: 'short' });
+        
+        let activeCount = 0;
+        const daysInMonth = new Date(year, m + 1, 0).getDate();
+        for (let d = 1; d <= daysInMonth; d++) {
+          const ds = `${year}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          if (Storage.data.periods[ds]) activeCount++;
+        }
+
+        monthBox.innerHTML = `
+          <div class="text-xs font-mono uppercase text-zinc-500 mb-1">${mName}</div>
+          <div class="text-lg font-light ${activeCount > 0 ? 'text-zinc-900 dark:text-zinc-100 font-normal' : 'text-zinc-300 dark:text-zinc-700'}">${activeCount}</div>
+          <div class="text-[10px] text-zinc-400">days logged</div>
+        `;
+        monthBox.addEventListener('click', () => {
+          currentDate.setMonth(m);
+          document.getElementById('view-toggle').click();
+        });
+        yearGrid.appendChild(monthBox);
+      }
+    }
+
+    renderMonth();
+  </script>
+</body>
+</html>
