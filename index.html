@@ -355,6 +355,28 @@
       renderYear();
     });
 
+    // Swipe Gestures for Month View
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const monthViewContainer = document.getElementById('month-view');
+
+    monthViewContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    monthViewContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+        } else {
+          currentDate.setMonth(currentDate.getMonth() - 1);
+        }
+        renderMonth();
+      }
+    }, { passive: true });
+
     // Drawer Listeners
     document.getElementById('close-drawer').addEventListener('click', () => drawer.classList.add('hidden'));
     document.getElementById('save-drawer').addEventListener('click', () => {
@@ -453,31 +475,23 @@
         });
 
         let mainText = "—";
-        let subText = "No log";
+        let subText = "";
 
         if (monthStarts.length > 0) {
-          const firstStartStr = monthStarts[0];
-          const firstStartDt = new Date(firstStartStr + 'T00:00:00');
-          const dayNum = firstStartDt.getDate();
+          const dayStrings = monthStarts.map(d => {
+            const dt = new Date(d + 'T00:00:00');
+            const dayNum = dt.getDate();
+            return `${dayNum}${getDaySuffix(dayNum)}`;
+          });
 
-          subText = `Started ${dayNum}${getDaySuffix(dayNum)}`;
-
-          const prevIndex = allDates.indexOf(firstStartStr) - 1;
-          if (prevIndex >= 0) {
-            const prevDt = new Date(allDates[prevIndex] + 'T00:00:00');
-            const diffTime = Math.abs(firstStartDt - prevDt);
-            const cycleDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-            mainText = `${cycleDays}d`;
-          } else {
-            mainText = `${dayNum}${getDaySuffix(dayNum)}`;
-            subText = "First logged start";
-          }
+          mainText = dayStrings.join(', ');
+          subText = monthStarts.length === 1 ? "Started" : `${monthStarts.length} starts`;
         }
 
         monthBox.innerHTML = `
           <div class="text-[11px] font-mono uppercase text-zinc-400 tracking-wider">${mName}</div>
-          <div class="text-xl font-light ${monthStarts.length > 0 ? 'text-rose-500 font-semibold' : 'text-zinc-300 dark:text-zinc-700'} my-1">${mainText}</div>
-          <div class="text-[10px] text-zinc-500 dark:text-zinc-400 truncate">${subText}</div>
+          <div class="text-xs font-semibold ${monthStarts.length > 0 ? 'text-rose-500' : 'text-zinc-300 dark:text-zinc-700'} my-auto truncate px-1">${mainText}</div>
+          <div class="text-[10px] text-zinc-400 dark:text-zinc-500">${subText}</div>
         `;
         
         monthBox.addEventListener('click', () => {
